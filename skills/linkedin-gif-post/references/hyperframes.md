@@ -15,7 +15,7 @@ HyperFrames is HeyGen's open-source (Apache-2.0) HTML-to-video renderer, tested 
 
 ## Commands
 
-- `npx hyperframes lint <dir>`. Expected output: 0 errors. Warnings about the nested clip and overlapping tweens on the same element are known and harmless for renders.
+- `npx hyperframes lint <dir>`. Expected output: 0 errors. Warnings about the nested clip are known and harmless. `overlapping_gsap_tweens` fires on sequential tweens built in a loop, with wrong times; check the beat sheet rather than the warning. The linter does not catch tweens that end after `END`; the templates' red banner does.
 - `npx hyperframes snapshot <dir> --at 0,1.4,2.2 --no-end -o <dir>/snapshots` writes PNG stills. `scripts/snapshot_sheet.py` wraps it.
 - `npx hyperframes render <dir> -o out.mp4 --fps 30 --quiet` takes about 10 to 20 s for 150 frames on a laptop. `scripts/render_gif.py` wraps it.
 - Render has its own `--format gif`. The scripts encode with ffmpeg instead (`palettegen=stats_mode=diff`, `paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle`) to control colors, size and fps.

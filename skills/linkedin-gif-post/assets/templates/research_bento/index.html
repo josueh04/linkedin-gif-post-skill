@@ -15,7 +15,7 @@
   CTA band at the bottom: "FULL DOCUMENT · LINK IN THE POST" or COMMENT "KEYWORD" (references/copy.md).
 -->
 <style>
-/* BRAND TOKENS (new_animation.py --brand replaces this block) */
+/* BRAND TOKENS: template defaults. new_animation.py --brand appends the brand's own :root at the end of this stylesheet, which wins. */
 :root{
   --bg:#08070C;--bg-rgb:8,7,12;
   --ink:#F5F4F8;--ink-rgb:245,244,248;
@@ -118,7 +118,7 @@ svg.abs{position:absolute;left:0;top:0;overflow:visible}
 <div id="eyebrow">RESEARCH<i>/</i>ACCEPTANCE TEST</div>
 <h1><b>14 checks</b> before you trust<br>a software factory.</h1>
 <div id="claim">Generating code got cheap. <span>Verifying it did not.</span></div>
-<div id="inside">INSIDE<i>:</i> 14-CHECK SCORECARD <i>+</i> SCORING RULE <i>+</i> LINEARB DATA</div>
+<div id="inside"><b style="color:var(--accent-2)">INSIDE:</b> 14-CHECK SCORECARD <i>+</i> SCORING RULE <i>+</i> LINEARB DATA</div>
 
 <!-- FACTORY LINE -->
 <div class="card" id="line" style="left:60px;top:404px;width:960px;height:262px">
@@ -242,6 +242,12 @@ const WF = document.getElementById("waffle"), AG = [13, 37, 58, 76, 94], AGE = [
 for (let i = 0; i < 100; i++) { const c = document.createElement("i"); if (AG.includes(i)) { c.className = "ag"; AGE.push(c); } WF.appendChild(c); }
 AGE.forEach((c, k) => { const s = .8 + k * 1.8; tl.to(c, {scale:1.6, duration:.2, ease:"back.out(3)"}, s).to(c, {scale:1, duration:.4}, s + .3); });
 
+if (tl.duration() > END + 0.001) {   // guard: a tween past END breaks the loop seam
+  const w = document.createElement("div");
+  w.textContent = `TIMELINE RUNS TO ${tl.duration().toFixed(2)} s, PAST END = ${END} s`;
+  w.style.cssText = "position:absolute;left:0;right:0;top:0;padding:18px;background:#E5484D;color:#fff;font:700 28px monospace;text-align:center;z-index:99";
+  document.getElementById("root").appendChild(w);
+}
 tl.set({}, {}, END);
 window.__timelines["main"] = tl; tl.seek(0);
 </script>

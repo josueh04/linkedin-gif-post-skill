@@ -11,11 +11,28 @@
 
 ## Header (never animates)
 
-- **The logo,** large: a wordmark at about 52 px, or a logo file at the same height. If the brand has a motif (a cursor, a dot, a slash), a small loop on it is a cheap way to look alive.
+The header stays still, but its position is yours: top-left, split left and right, or at the bottom above the CTA (`compose.md`, Layout).
+
+
+- **The logo,** large: a wordmark at about 52 px, or a logo file at about 56 px tall (`new_animation.py --logo`). If the brand has a motif (a cursor, a dot, a slash), a small loop on it is a cheap way to look alive.
 - **The eyebrow:** the content type and the resource name, in mono caps tracked .12 to .18em, in an accent.
 - **The title:** the count plus the promise, in the brand's display font, at 70 to 80 px. It is the largest type on the canvas. Put the count in the accent.
 - **The value line:** the thesis or the outcome, in the body font at 30 to 40 px, with the key phrase in a static gradient.
 - **The INSIDE line:** what the resource contains, counted, in mono caps at 18 to 20 px, with `+` separators in an accent. Count from the resource; never estimate.
+
+## Typography
+
+- **The brand's fonts come first,** including a serif if the brand uses one.
+- **Proprietary fonts:** if the brand's fonts are proprietary and you hold no license for the files, use the closest open font:
+  - a geometric or neo-grotesk sans: Inter or Geist;
+  - a grotesk with character: Space Grotesk or Hanken Grotesk;
+  - a text serif: Source Serif 4 or Newsreader;
+  - a mono: JetBrains Mono or Geist Mono.
+
+  Say which substitution you made.
+- **Without a brand typeface,** prefer a sans for display. Editorial italic serifs on a tech topic read as generic AI output.
+- **Bundle every font locally,** in `animation/fonts/`. A missing font falls back to a system face in the render.
+- `.fit` elements in the templates shrink at load until they fit their max-width. Use it on any one-line text that varies in length.
 
 ## Cards
 
@@ -76,5 +93,5 @@ GIF frames store only the pixels that change, so file size follows how many pixe
 - A near-copy of someone else's post: their layout, palette or CTA shape. Borrow the principle; keep the brand.
 - A header that names the topic but not what the reader gets.
 - System fonts; the render falls back to something cheap. Bundle the brand's fonts locally.
-- Serif "editorial italic" display faces on a tech brand; they read as generic AI output.
+- Text that runs off the canvas or out of its card. No gate catches it: check the sheet, or mark the element `.fit`.
 - A square text card that repeats the caption.

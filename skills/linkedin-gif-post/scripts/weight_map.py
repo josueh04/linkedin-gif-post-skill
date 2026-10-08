@@ -6,7 +6,7 @@
 
 GIF frames store only the pixels that changed, so file size follows the changed-pixel count.
 Prints a 4x5 grid (or your named boxes, in 1080x1350 coordinates) with each area's share of
-all changes, and writes <gif>-weight.png: the first frame with changed areas in red. The
+all changes, and writes <name>-weight.png next to the GIF (graphic-weight.png for graphic.gif): the first frame with changed areas in red. The
 usual culprits: a gradient that drifts over a large area, a blurred glow that pulses, an
 element that moves for the whole loop (a rotating ring, a nonstop waveform).
 """

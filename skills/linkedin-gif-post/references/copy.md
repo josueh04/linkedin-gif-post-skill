@@ -6,7 +6,7 @@ The graphic stops the scroll. The caption decides whether the reader wants the r
 
 1. **Line 1: the reader's problem or stake, in plain words.** Name the tool or topic, and make a claim about the reader's world. "Your AI coding pipeline can pass its own tests and still rot your codebase." beats "The cost of generating code collapsed.", which is true but abstract. Never spend the preview on who quoted whom.
 2. **The thesis in one or two short sentences,** with the source named once.
-3. **The proof as a short list,** one number per line, each with what it means. Do not stack five numbers in one sentence. Define any jargon ("fair teams", "merge yield") or drop it.
+3. **The proof as a short list,** one number per line, each with what it means. If the resource has few numbers, use its strongest concrete facts: counts, named steps, a short quote. Do not stack five numbers in one sentence. Define any jargon ("fair teams", "merge yield") or drop it.
 4. **The method as a numbered list** that mirrors the cards in the GIF, in the same order. Lead-magnet captions with a numbered list drew 1.53x their author's usual comments.
 5. **The scoring rule or the one insight,** in one line ("Fewer than 11 yes means...").
 6. **What the resource contains, then the call to action** (see the two modes below).
@@ -28,7 +28,7 @@ Start with the link mode if nobody can answer DMs. Move to the comment mode once
 
 ## Worked example (comment mode)
 
-A post for a free playbook, paired with the radar GIF in the README gallery. Line 1 names the tool and the outcome, the arrows list the six outputs that the GIF's cards show, and the keyword lives only in the image.
+A post for a free playbook, paired with a radar-style GIF (the first graphic in the repository README). Line 1 names the tool and the outcome, the arrows list the six outputs that the GIF's cards show, and the keyword lives only in the image.
 
 ```text
 One hour a week with Opus 5.5 gets you 6 pieces of client content.
@@ -53,6 +53,8 @@ Every prompt copy-paste ready.
 
 Get free access 👇
 ```
+
+The closing "Get free access 👇" is fine in a caption: the no-bait rule is for the image's CTA band, where LinkedIn reads the picture as engagement bait.
 
 Posted as an animated GIF in place of a static photo, it drew about twice the comments per 1k followers of the static version (`evidence.md`).
 

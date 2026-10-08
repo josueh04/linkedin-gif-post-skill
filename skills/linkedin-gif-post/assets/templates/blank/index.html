@@ -1,0 +1,117 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="fonts/fonts.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+<!--
+  blank: the frame only, for an original composition (references/compose.md).
+  What is fixed: the canvas, the brand tokens, the background, the header slots and the CTA band.
+  What is yours: everything inside #body (1080 wide, from y=400 to y=1210 by default) and the timeline.
+  The header never animates, but you may place it anywhere (compose.md, Layout). The CTA band stays at the bottom.
+  Elements with class "fit" shrink at load until they fit their max-width (the CTA, the INSIDE line, long titles).
+  If any tween runs past END, a red banner appears on the canvas: the sheet and the gates then show the mistake.
+  GIF profile: data-gif-profile="ambient" (10 s, 15 fps, 1080x1350, never clears) or "build"
+  (8 s, 30 fps, 720x900, clears and rebuilds). new_animation.py --profile sets both attributes.
+-->
+<style>
+/* BRAND TOKENS: template defaults. new_animation.py --brand appends the brand's own :root at the end of this stylesheet, which wins. */
+:root{
+  --bg:#08070C;--bg-rgb:8,7,12;
+  --ink:#F5F4F8;--ink-rgb:245,244,248;
+  --ink-2:#D9D7E2;--muted:#8A8799;
+  --accent:#7C5CFF;--accent-rgb:124,92,255;
+  --accent-2:#A98BFF;--accent-2-rgb:169,139,255;
+  --accent-3:#C9B6FF;
+  --info:#5B9BFF;--info-rgb:91,155,255;
+  --ok:#3EE9A6;--ok-rgb:62,233,166;
+  --warn:#F0B23E;--warn-rgb:240,178,62;
+  --card-1:#1B1830;--card-1-rgb:27,24,48;
+  --card-2:#0E0C16;--card-2-rgb:14,12,22;
+  --cta:#7C5CFF;--cta-ink:#08070C;--cta-ink-rgb:8,7,12;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Hanken Grotesk',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+#root{width:1080px;height:1350px;overflow:hidden;position:relative;background:var(--bg);font-family:var(--font-body);color:var(--ink);-webkit-font-smoothing:antialiased}
+.wash{position:absolute;inset:0;background:
+  radial-gradient(560px 420px at 92% 6%,rgba(var(--accent-rgb),.22),transparent 70%),
+  radial-gradient(520px 420px at 4% 58%,rgba(var(--info-rgb),.10),transparent 70%)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(var(--ink-rgb),.035) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--ink-rgb),.035) 1px,transparent 1px);background-size:54px 54px;-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 30%,transparent 80%)}
+/* header (never animates) */
+#logo{position:absolute;left:60px;top:52px;font:700 52px var(--font-display);letter-spacing:-.04em;color:var(--ink)}
+#logo img{height:56px;width:auto;display:block}
+#eyebrow{position:absolute;right:60px;top:72px;font:700 18px var(--font-mono);letter-spacing:.14em;color:var(--accent-2);white-space:nowrap}
+h1{position:absolute;left:58px;top:132px;font:600 76px/1.0 var(--font-display);letter-spacing:-.04em;color:#fff;white-space:nowrap}
+h1 b{font-weight:700;color:var(--accent-2)}
+#claim{position:absolute;left:61px;top:302px;font:600 34px var(--font-body);letter-spacing:-.02em;color:var(--ink-2);white-space:nowrap}
+#claim span{background:linear-gradient(90deg,var(--accent-3),var(--accent) 50%,var(--info));-webkit-background-clip:text;background-clip:text;color:transparent}
+#inside{position:absolute;left:62px;top:356px;font:700 18px var(--font-mono);letter-spacing:.1em;color:var(--ink-2);white-space:nowrap}
+#inside i{font-style:normal;color:var(--ok);margin:0 6px}
+#inside b{font-weight:700;color:var(--accent-2)}
+/* body: yours. A card style is here if your concept uses cards; delete it if not. */
+#body{position:absolute;left:0;top:400px;width:1080px;height:810px}
+.card{position:absolute;border-radius:24px;background:linear-gradient(180deg,rgba(var(--card-1-rgb),.88),rgba(var(--card-2-rgb),.92));border:1px solid rgba(var(--ink-rgb),.10);overflow:hidden}
+.mono{font:700 13px var(--font-mono);letter-spacing:.08em;color:var(--muted);white-space:nowrap}
+svg.abs{position:absolute;left:0;top:0;overflow:visible}
+/* CTA band (never animates) */
+#cta{position:absolute;left:0;right:0;bottom:0;height:124px;background:var(--cta);display:flex;align-items:center;justify-content:center}
+#cta .k{font:700 72px var(--font-display);letter-spacing:-.03em;color:var(--cta-ink);white-space:nowrap}
+#cta .k em{font-style:normal;color:var(--ink)}
+</style></head><body>
+<div id="root" data-gif-profile="ambient" data-composition-id="main" data-start="0" data-duration="10" data-width="1080" data-height="1350">
+<div id="scene-clip" class="clip" data-start="0" data-duration="10" style="position:absolute;inset:0">
+<div class="wash"></div><div class="grid"></div>
+
+<div id="logo">acme</div>
+<div id="eyebrow">CONTENT TYPE / RESOURCE NAME</div>
+<h1><b>N things</b> the title promises<br>on two lines.</h1>
+<div id="claim" class="fit" style="max-width:960px">The thesis in one line. <span>The outcome, emphasized.</span></div>
+<div id="inside" class="fit" style="max-width:960px"><b>INSIDE:</b> WHAT <i>+</i> THE RESOURCE <i>+</i> CONTAINS</div>
+
+<div id="body">
+  <!-- Your composition goes here. Read references/compose.md first. -->
+</div>
+
+<div id="cta"><div class="k fit" style="max-width:1000px">FULL DOCUMENT · <em>LINK IN THE POST</em></div></div>
+</div>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+gsap.registerPlugin(MotionPathPlugin);
+const END = 10;                        // keep equal to data-duration on #root and #scene-clip
+const NS = "http://www.w3.org/2000/svg";
+const TOK = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();   // GSAP cannot tween var()
+function el(tag, attrs, parent){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+let seed = 7; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;   // deterministic, never Math.random()
+
+// Shrink every .fit element until it fits its max-width (deterministic: runs once, after fonts load).
+function fitAll() {
+  document.querySelectorAll(".fit").forEach(e => {
+    const max = parseFloat(e.style.maxWidth) || e.parentElement.clientWidth;
+    let fs = parseFloat(getComputedStyle(e).fontSize);
+    e.style.whiteSpace = "nowrap"; e.style.maxWidth = "none";
+    while (e.scrollWidth > max && fs > 12) { fs -= 1; e.style.fontSize = fs + "px"; }
+  });
+}
+fitAll();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+
+const tl = gsap.timeline({ paused: true });
+
+// Build the body and its motion here. Patterns: references/compose.md, Motion library.
+// Rules: frame 0 is the finished poster; every cycle returns to its start state by END.
+
+// Guard: a tween that ends after END breaks the loop seam. Show it on the canvas instead of failing silently.
+if (tl.duration() > END + 0.001) {
+  const w = document.createElement("div");
+  w.textContent = `TIMELINE RUNS TO ${tl.duration().toFixed(2)} s, PAST END = ${END} s`;
+  w.style.cssText = "position:absolute;left:0;right:0;top:0;padding:18px;background:#E5484D;color:#fff;font:700 28px monospace;text-align:center;z-index:99";
+  document.getElementById("root").appendChild(w);
+}
+tl.set({}, {}, END);
+window.__timelines["main"] = tl; tl.seek(0);
+</script>
+</body></html>

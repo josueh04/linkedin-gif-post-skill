@@ -1,6 +1,8 @@
 # research_bento
 
-An ambient loop for a post that shares research, a checklist or a method. The template is a complete worked example: "14 checks before you trust a software factory", a research note on AI coding pipelines. It is 10 s at 15 fps, with every frame finished. To make a new post, keep the frame and the four cards, then swap the words, numbers and labels.
+**Fits:** a research post whose resource is a checklist or a method, backed by comparison data. Concept: "one real case travels the method, gets scored on every check, and the data shows why the checks matter." Composed with the method in `references/compose.md`. Read it as a worked example of the method; start a resource of another shape from `blank`.
+
+An ambient loop for a post that shares research, a checklist or a method. The template is a complete worked example: "14 checks before you trust a software factory", a research note on AI coding pipelines. It is 10 s at 15 fps, with every frame finished. To reuse it for a resource of the same shape, keep the frame and the four cards, then swap the words, numbers and labels.
 
 ## Frame
 

@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """Start a new animated post from a template, optionally in another brand.
 
-    python3 scripts/new_animation.py --out posts/my-post
-    python3 scripts/new_animation.py --out posts/my-post --brand posts/my-post/brand.json
+    python3 scripts/new_animation.py --out posts/my-post --template blank --profile ambient --brand posts/my-post/brand.json
+    python3 scripts/new_animation.py --out posts/my-post --template research_bento --brand posts/my-post/brand.json
 
-Writes <out>/animation/ (index.html plus fonts/) ready for HyperFrames. With --brand (a file
-written by brand_extract.py, or by hand) the template's :root tokens are replaced by the
-brand's colors and fonts, and the brand's font files are copied in. Then edit index.html:
-change words, numbers and the logo; keep the ids and classes the timeline uses.
+Writes <out>/animation/ (index.html plus fonts/) ready for HyperFrames. The default template is
+`blank`: the frame only (brand tokens, header slots, CTA band), for an original composition built
+with references/compose.md. --profile sets the loop family on blank: ambient (10 s) or build (8 s). With --brand (a file
+written by brand_extract.py, or by hand) the brand's colors and fonts are appended as a second
+:root block that overrides the template defaults, and the brand's font files and their licenses
+are copied in. With --logo, the logo file replaces the text wordmark.
 """
 import argparse
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -44,8 +47,10 @@ def brand_root(brand):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", required=True, help="post folder; the animation goes in <out>/animation")
-    ap.add_argument("--template", default="research_bento", help="folder name under assets/templates/")
+    ap.add_argument("--template", default="blank", help="folder name under assets/templates/ (default: blank)")
+    ap.add_argument("--profile", choices=["ambient", "build"], help="loop family; sets data-gif-profile and the duration (ambient 10 s, build 8 s)")
     ap.add_argument("--brand", help="brand.json from brand_extract.py")
+    ap.add_argument("--logo", help="an SVG or PNG of the brand's logo; replaces the text wordmark in #logo")
     ap.add_argument("--force", action="store_true", help="overwrite an existing animation folder")
     a = ap.parse_args()
     src = SKILL / "assets" / "templates" / a.template
@@ -58,29 +63,54 @@ def main():
     if out.exists():
         shutil.rmtree(out)
     shutil.copytree(src, out)
+    if a.profile:
+
+        cfg = __import__("_cfg").animated(a.profile)
+        dur = int(cfg["loop_seconds"])
+        html = (out / "index.html").read_text()
+        root = re.search(r'<div[^>]*id="root"[^>]*>', html).group(0)
+        tag = re.sub(r'data-gif-profile="[a-z_]+"', f'data-gif-profile="{a.profile}"', root)
+        tag = re.sub(r'data-duration="[0-9.]+"', f'data-duration="{dur}"', tag)
+        html = html.replace(root, tag, 1)
+        html = re.sub(r'(id="scene-clip"[^>]*?)data-duration="[0-9.]+"', rf'\g<1>data-duration="{dur}"', html, count=1)
+        html = re.sub(r"const END = [0-9.]+;", f"const END = {dur};", html, count=1)
+        (out / "index.html").write_text(html)
     if a.brand:
         brand = json.loads(Path(a.brand).read_text())
         html = (out / "index.html").read_text()
-        marker = "/* BRAND TOKENS (new_animation.py --brand replaces this block) */"
-        if marker not in html:
-            sys.exit("template has no BRAND TOKENS block")
         html = html.replace("</style>", "/* brand.json (new_animation.py --brand) */\n" + brand_root(brand) + "\n</style>", 1)
         (out / "index.html").write_text(html)
         bdir = Path(a.brand).resolve().parent
-        faces = []
+        faces, have = [], (out / "fonts" / "fonts.css").read_text()
         for role, spec in brand.get("fonts", {}).items():
             for w, fname in (spec.get("files") or {}).items():
                 fsrc = bdir / fname
-                if fsrc.exists():
+                face = f"@font-face{{font-family:'{spec['family']}';font-weight:{w};src:url({fsrc.name}) format('woff2')}}"
+                if fsrc.exists() and fsrc.name not in have and face not in faces:
                     shutil.copy(fsrc, out / "fonts" / fsrc.name)
-                    faces.append(f"@font-face{{font-family:'{spec['family']}';font-weight:{w};src:url({fsrc.name}) format('woff2')}}")
+                    faces.append(face)
+        for lic in (bdir / "brand-fonts").glob("LICENSE-*.txt") if (bdir / "brand-fonts").is_dir() else []:
+            (out / "fonts" / "licenses").mkdir(exist_ok=True)
+            shutil.copy(lic, out / "fonts" / "licenses" / lic.name)
         if faces:
             with open(out / "fonts" / "fonts.css", "a") as fh:
-                fh.write("\n/* brand fonts */\n" + "\n".join(faces) + "\n")
+                fh.write("\n/* brand fonts (new_animation.py --brand) */\n" + "\n".join(faces) + "\n")
+    if a.logo:
+        src_logo = Path(a.logo)
+        if not src_logo.exists() or src_logo.suffix.lower() not in (".svg", ".png", ".webp"):
+            sys.exit(f"--logo must be an existing .svg, .png or .webp file: {src_logo}")
+        (out / "assets").mkdir(exist_ok=True)
+        shutil.copy(src_logo, out / "assets" / ("logo" + src_logo.suffix.lower()))
+        html = (out / "index.html").read_text()
+        html, n = re.subn(r'(<div id="logo"[^>]*>).*?(</div>)', rf'\g<1><img src="assets/logo{src_logo.suffix.lower()}" alt="logo">\g<2>', html, count=1, flags=re.S)
+        if not n:
+            sys.exit("template has no #logo element")
+        (out / "index.html").write_text(html)
     profile, duration = composition(out / "index.html")
     (out / "hyperframes.json").write_text(json.dumps({"name": Path(a.out).name, "entry": "index.html"}, indent=2) + "\n")
     print(f"wrote {out} (template {a.template}, GIF profile {profile}, {duration:g} s)")
-    print(f"next: edit {out / 'index.html'}, then python3 {Path(__file__).with_name('snapshot_sheet.py')} {out}")
+    guide = "references/compose.md" if a.template == "blank" else f"assets/templates/{a.template}/README.md"
+    print(f"next: read {guide}, edit {out / 'index.html'}, then python3 {Path(__file__).with_name('snapshot_sheet.py')} {out}")
 
 
 if __name__ == "__main__":

@@ -26,12 +26,12 @@
 
 <p align="center"><sub>Graphics made with this method for real LinkedIn posts. The full GIFs are 1080x1350; these previews are scaled down.</sub></p>
 
-A Claude Code skill for anyone who shares research, checklists, guides or playbooks on LinkedIn and gets little back. It reads the resource and your website, then builds an animated graphic that previews what the resource contains, as a living system in your colors and fonts. It renders the graphic locally with [HyperFrames](https://github.com/heygen-com/hyperframes), checks it against LinkedIn's limits, and rewrites the caption so the first two lines say what the reader gets.
+A Claude Code skill for anyone who shares research, checklists, guides or playbooks on LinkedIn and gets little back. It reads the resource and your website, then designs an animated graphic for that resource: its own concept, layout and motion, previewing what the resource contains in your colors and fonts. It is not a template with your words swapped in. It renders the graphic locally with [HyperFrames](https://github.com/heygen-com/hyperframes), checks it against LinkedIn's limits, and rewrites the caption so the first two lines say what the reader gets.
 
 It comes out of a real production: a frame-by-frame study of eight high-performing lead-magnet posts and 192 posts by their authors, then a week of posts made, measured and remade. Every rule in it exists because a version without it did worse.
 
 > [!IMPORTANT]
-> **Alpha.** The skill, the scripts and the `research_bento` template work end to end on macOS, and the gates pass on every graphic above. Only `research_bento` ships as a template so far. The other styles in the gallery were built with the same method and are on the [Roadmap](#roadmap).
+> **Alpha.** The skill and the scripts work end to end on macOS, and the gates pass on every graphic above. Each graphic is composed for its resource from a blank frame, with the method in [`compose.md`](skills/linkedin-gif-post/references/compose.md). Two templates ship as worked examples: `blank` and `research_bento`. The [Roadmap](#roadmap) says what is next.
 
 ## Installation
 
@@ -115,6 +115,19 @@ python3 scripts/gif_gate.py posts/my-post/graphic.gif
 
 **The Fix.** [`brand_extract.py`](skills/linkedin-gif-post/scripts/brand_extract.py) reads your site's CSS variables, palette, fonts and wordmark, and downloads the fonts (OFL) so renders stay local. Every color and font in the template is a token. [`analyze_reference.py`](skills/linkedin-gif-post/scripts/analyze_reference.py) measures a post you admire, so you can borrow the principle, not the layout.
 
+### #5: Every Post Looks the Same
+
+**The Problem.** A template tool gives every post the same layout with new words, and after the second post the feed sees the same picture again.
+
+**The Fix.** [`compose.md`](skills/linkedin-gif-post/references/compose.md) is the method for designing from scratch:
+- name the resource's shape (a process, a checklist, a transformation, a comparison...);
+- write a one-sentence concept;
+- sketch the zones;
+- plan the beats with a library of seek-safe motion patterns;
+- build on a `blank` frame that carries only the brand, the header and the CTA.
+
+When a composition works, `save_template.py` keeps it for the next resource of the same shape.
+
 ## What's Inside
 
 - **[SKILL.md](skills/linkedin-gif-post/SKILL.md)**: the workflow, from reading the resource to checking the live post, and the rules with their reasons.
@@ -126,8 +139,11 @@ python3 scripts/gif_gate.py posts/my-post/graphic.gif
   - [`gif_gate.py`](skills/linkedin-gif-post/scripts/gif_gate.py): the eight release gates.
   - [`weight_map.py`](skills/linkedin-gif-post/scripts/weight_map.py): where a GIF spends its bytes.
   - [`analyze_reference.py`](skills/linkedin-gif-post/scripts/analyze_reference.py): stats, a frame sheet and a motion heat map of any public LinkedIn post.
-- **Template**: [`research_bento`](skills/linkedin-gif-post/references/template.md), a 10 s ambient loop with four cards: a method line, a checklist, grouped bars and a share grid.
-- **References**: [design](skills/linkedin-gif-post/references/design.md), [copy](skills/linkedin-gif-post/references/copy.md), [HyperFrames notes](skills/linkedin-gif-post/references/hyperframes.md), [evidence](skills/linkedin-gif-post/references/evidence.md).
+  - [`save_template.py`](skills/linkedin-gif-post/scripts/save_template.py): keeps a composition that worked as a template, with a README to fill in.
+- **Templates**:
+  - [`blank`](skills/linkedin-gif-post/assets/templates/blank/index.html): the frame only (brand tokens, header slots, the CTA band, an empty timeline), and the starting point for every original composition.
+  - [`research_bento`](skills/linkedin-gif-post/assets/templates/research_bento/README.md): a worked example for a checklist-plus-data research post.
+- **References**: [compose](skills/linkedin-gif-post/references/compose.md) (read it first), [design](skills/linkedin-gif-post/references/design.md), [copy](skills/linkedin-gif-post/references/copy.md), [HyperFrames notes](skills/linkedin-gif-post/references/hyperframes.md), [evidence](skills/linkedin-gif-post/references/evidence.md).
 
 ## What You Need to Provide
 
@@ -145,10 +161,11 @@ python3 scripts/gif_gate.py posts/my-post/graphic.gif
 
 | Phase | What | Status |
 |---|---|---|
-| 1. Core | The skill, the scripts, `research_bento`, brand extraction, caption rules and the gates | Done on macOS |
-| 2. More templates | Radar, core, constellation and stack as brand-token templates, like the gallery | Next |
-| 3. Pilot | Someone outside the project, with their own brand and resource | Next |
-| 4. Distribution | A Claude Code plugin and `npx skills add` | Later |
+| 1. Core | The skill, the scripts, brand extraction, caption rules and the gates | Done on macOS |
+| 2. Compose from scratch | `compose.md`, the `blank` frame, the motion library and `save_template.py` | Done. Tested with a fresh agent on a new resource |
+| 3. More worked examples | Radar, core, constellation and stack as brand-token templates, like the gallery | Next |
+| 4. Pilot | Someone outside the project, with their own brand and resource | Next |
+| 5. Distribution | A Claude Code plugin and `npx skills add` | Later |
 
 ## License
 

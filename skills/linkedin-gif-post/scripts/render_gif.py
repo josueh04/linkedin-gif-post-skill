@@ -9,7 +9,7 @@ profile (`data-gif-profile` on #root, see config.json `profiles`):
   build    720x900 at 30 fps
   ambient  1080x1350 at 15 fps (research_bento)
 If the GIF is over max_bytes it retries with fewer colors, then without dithering,
-then at a lower fps, then narrower, and says which setting shipped. Then run gif_gate.py.
+then at a lower fps (never smaller, since the gate checks the size), and says which setting shipped. Then run gif_gate.py.
 """
 import argparse
 import os
@@ -61,21 +61,23 @@ def main():
     run(["ffmpeg", "-v", "error", "-y", "-i", str(mp4), "-frames:v", "1", str(png)])
 
     width = int(cfg["gif_size"][0])
-    colors = [c for c in (int(cfg["colors"]), 160, 128, 96) if c <= int(cfg["colors"])]
+    colors = list(dict.fromkeys(c for c in (int(cfg["colors"]), 160, 128, 96) if c <= int(cfg["colors"])))
     slower = max(10, round(fps * 5 / 6))      # 30 -> 25, 15 -> 12
     narrower = (width * 8 // 9) // 4 * 4      # 720 -> 640, 1080 -> 960
     bayer, flat = "bayer:bayer_scale=4", "none"
     # undithered 128 colors is often smaller than dithered 96 on flat UI, and looks cleaner
-    attempts = ([(fps, width, c, bayer) for c in colors] + [(fps, width, 128, flat)]
-                + [(slower, width, 128, bayer), (slower, narrower, 128, bayer)])
+    # never narrower than the profile's size: the SIZE gate would fail it
+    attempts = ([(fps, width, c, bayer) for c in colors] + [(fps, width, 128, flat), (fps, width, 96, flat)]
+                + [(slower, width, 128, bayer), (slower, width, 96, flat)])
     for f, w, c, d in attempts:
         size = encode(mp4, gif, f, w, c, d)
         print(f"gif {f} fps, {w}x{w * 5 // 4}, {c} colors, dither {d.split(':')[0]}: {size / 1048576:.2f} MiB")
         if size <= int(cfg["max_bytes"]):
             break
     else:
-        sys.exit(f"still over {int(cfg['max_bytes']) / 1048576:.2f} MiB: run weight_map.py on the GIF to see which area costs, "
-                 "then shrink or shorten that motion (references/design.md, Weight budget)")
+        sys.exit(f"still over {int(cfg['max_bytes']) / 1048576:.2f} MiB at {width} px: run weight_map.py on the GIF to see which "
+                 "area costs, then shrink or shorten that motion (references/design.md, Weight budget). "
+                 f"A narrower GIF ({narrower} px) would fail the SIZE gate.")
     print(f"wrote {mp4}, {gif}, {png}")
     print(f"next: python3 {Path(__file__).with_name('gif_gate.py')} {gif}")
 

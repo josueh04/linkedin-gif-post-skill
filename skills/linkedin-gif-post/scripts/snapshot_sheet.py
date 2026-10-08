@@ -7,12 +7,13 @@
 Without --at it takes ten evenly spaced moments across the composition's data-duration,
 ending just before the loop closes (that last tile must match the first).
 
-Writes <post>/animation-sheet.jpg. Look at it before rendering: a beat that reads badly
+Writes <post>/animation-sheet.jpg (the stills go in <post>/.snapshots/). Look at it before rendering: a beat that reads badly
 in a still almost always reads badly in motion.
 """
 import argparse
 import glob
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -31,7 +32,8 @@ def main():
     if not a.at:
         dur = composition(anim / "index.html")[1] or 8.0
         a.at = ",".join(f"{t:g}" for t in [round(i * (dur - 0.1) / 9, 2) for i in range(10)])
-    snaps = anim / "snapshots"
+    snaps = anim.parent / ".snapshots"   # outside the project, so renders never pick them up
+    shutil.rmtree(snaps, ignore_errors=True)
     env = dict(os.environ, DO_NOT_TRACK="1", HYPERFRAMES_SKIP_SKILLS="1")
     env.pop("GEMINI_API_KEY", None)  # keeps frames on this machine
     p = subprocess.run(["npx", "-y", "hyperframes@latest", "snapshot", str(anim), "--at", a.at, "--no-end",
