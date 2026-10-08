@@ -1,0 +1,248 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="fonts/fonts.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<!--
+  research_bento: an ambient loop for a research post (worked example: "14 checks before you trust a
+  software factory"). GIF profile "ambient": 10 s, 15 fps, shipped at 1080x1350. Every frame is the finished
+  composition; nothing clears or rebuilds. Colors and fonts are tokens in :root; new_animation.py --brand
+  swaps them. Cards, one motion each:
+    #line   the method as a line of stations; a token travels it twice, one station flags a problem
+    #score  the full checklist; a scan bar walks it, each check pops; the most-missed item is flagged
+    #yield  the headline data as grouped bars; each pair is called out in turn with its gap
+    #share  one share as a 100-cell grid; the highlighted cells pulse in sequence
+  Header: logo (wordmark + cursor), eyebrow, title with the count, value line, INSIDE line.
+  CTA band at the bottom: "FULL DOCUMENT · LINK IN THE POST" or COMMENT "KEYWORD" (references/copy.md).
+-->
+<style>
+/* BRAND TOKENS (new_animation.py --brand replaces this block) */
+:root{
+  --bg:#08070C;--bg-rgb:8,7,12;
+  --ink:#F5F4F8;--ink-rgb:245,244,248;
+  --ink-2:#D9D7E2;--muted:#8A8799;
+  --accent:#7C5CFF;--accent-rgb:124,92,255;
+  --accent-2:#A98BFF;--accent-2-rgb:169,139,255;
+  --accent-3:#C9B6FF;
+  --info:#5B9BFF;--info-rgb:91,155,255;
+  --ok:#3EE9A6;--ok-rgb:62,233,166;
+  --warn:#F0B23E;--warn-rgb:240,178,62;
+  --card-1:#1B1830;--card-1-rgb:27,24,48;
+  --card-2:#0E0C16;--card-2-rgb:14,12,22;
+  --cta:#7C5CFF;--cta-ink:#08070C;--cta-ink-rgb:8,7,12;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Hanken Grotesk',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+#root{width:1080px;height:1350px;overflow:hidden;position:relative;background:var(--bg);font-family:var(--font-body);color:var(--ink);-webkit-font-smoothing:antialiased}
+.wash{position:absolute;inset:0;background:
+  radial-gradient(560px 420px at 92% 6%,rgba(var(--accent-rgb),.22),transparent 70%),
+  radial-gradient(520px 420px at 4% 58%,rgba(var(--info-rgb),.10),transparent 70%),
+  radial-gradient(460px 320px at 96% 86%,rgba(var(--ok-rgb),.07),transparent 70%)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(var(--ink-rgb),.035) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--ink-rgb),.035) 1px,transparent 1px);background-size:54px 54px;-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 30%,transparent 80%)}
+/* header */
+#logo{position:absolute;left:60px;top:52px;display:flex;align-items:baseline;font:700 52px var(--font-display);letter-spacing:-.04em;color:var(--ink)}
+#logo span{display:inline-block;width:20px;height:38px;margin-left:6px;border-radius:4px;background:linear-gradient(120deg,var(--accent-3),var(--accent));transform:translateY(3px)}
+#eyebrow{position:absolute;right:60px;top:72px;font:700 18px var(--font-mono);letter-spacing:.14em;color:var(--accent-2);white-space:nowrap}
+#eyebrow i{font-style:normal;color:var(--muted);margin:0 8px}
+h1{position:absolute;left:58px;top:132px;font:600 76px/1.0 var(--font-display);letter-spacing:-.04em;color:#fff;white-space:nowrap}
+h1 b{font-weight:700;color:var(--accent-2)}
+#claim{position:absolute;left:61px;top:302px;font:600 34px var(--font-body);letter-spacing:-.02em;color:var(--ink-2);white-space:nowrap}
+#claim span{background:linear-gradient(90deg,var(--accent-3),var(--accent) 50%,var(--info));-webkit-background-clip:text;background-clip:text;color:transparent}
+#inside{position:absolute;left:62px;top:356px;font:700 18px var(--font-mono);letter-spacing:.1em;color:var(--ink-2);white-space:nowrap}
+#inside i{font-style:normal;color:var(--ok);margin:0 6px}
+/* cards */
+.card{position:absolute;border-radius:24px;background:linear-gradient(180deg,rgba(var(--card-1-rgb),.88),rgba(var(--card-2-rgb),.92));border:1px solid rgba(var(--ink-rgb),.10);overflow:hidden}
+.hd{position:absolute;left:22px;top:18px;right:20px;height:32px;display:flex;align-items:center;gap:11px}
+.hd b{font:600 22px var(--font-display);letter-spacing:-.02em;color:#fff;white-space:nowrap}
+.pill{margin-left:auto;font:700 13px var(--font-mono);letter-spacing:.06em;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:6px 11px;white-space:nowrap}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.mono{font:700 13px var(--font-mono);letter-spacing:.08em;color:var(--muted);white-space:nowrap}
+svg.abs{position:absolute;left:0;top:0;overflow:visible}
+/* factory line */
+.st{position:absolute;top:70px;width:132px;height:96px;margin-left:-66px;border-radius:16px;background:rgba(var(--bg-rgb),.75);border:1.5px solid rgba(var(--accent-2-rgb),.35);text-align:center;padding-top:14px}
+.st small{display:block;font:700 12px var(--font-mono);letter-spacing:.1em;color:var(--muted)}
+.st b{display:block;font:700 22px var(--font-display);letter-spacing:-.02em;color:#fff;margin-top:4px}
+.st .cks{display:flex;justify-content:center;gap:5px;margin-top:9px}
+.st .cks i{width:11px;height:11px;border-radius:3px;background:var(--ok);opacity:.55}
+.st .glow{position:absolute;inset:-2px;border-radius:16px;box-shadow:0 0 0 2px var(--accent-2),0 0 28px rgba(var(--accent-rgb),.75);opacity:0}
+.st.end{border-color:rgba(var(--ok-rgb),.55)}
+.st.end b{color:var(--ok)}
+#tok{position:absolute;left:0;top:118px;width:46px;height:30px;margin:-15px 0 0 -23px;border-radius:7px;background:var(--ink);box-shadow:0 0 0 4px rgba(var(--accent-2-rgb),.3),0 0 22px var(--accent-2);display:flex;align-items:center;justify-content:center;font:700 11px var(--font-mono);color:var(--bg);letter-spacing:.04em}
+#weak{position:absolute;left:400px;top:180px;transform:translateX(-50%);font:700 14px var(--font-mono);letter-spacing:.05em;color:var(--warn);background:rgba(var(--warn-rgb),.10);border:1px solid rgba(var(--warn-rgb),.5);border-radius:8px;padding:6px 10px;white-space:nowrap;opacity:0}
+#linefoot{position:absolute;left:22px;bottom:16px;font:500 17px var(--font-body);color:var(--muted);white-space:nowrap}
+#linefoot b{color:#fff;font-weight:700}
+/* scorecard */
+.row{position:absolute;left:18px;right:18px;height:28px;display:flex;align-items:center;gap:12px;border-radius:8px;padding:0 10px}
+.row .n{width:26px;font:700 14px var(--font-mono);color:var(--muted);text-align:right;flex:none}
+.row .t{font:500 18.5px var(--font-body);color:var(--ink-2);white-space:nowrap}
+.row .ck{margin-left:auto;width:22px;height:22px;border-radius:6px;background:rgba(var(--ok-rgb),.14);border:1px solid rgba(var(--ok-rgb),.5);display:flex;align-items:center;justify-content:center;flex:none}
+.row.hot{background:rgba(var(--warn-rgb),.09);border:1px solid rgba(var(--warn-rgb),.4)}
+.row.hot .t{color:#fff;font-weight:700}
+.row.hot .n{color:var(--warn)}
+
+.tag{margin-left:auto;font:700 11px var(--font-mono);letter-spacing:.06em;color:var(--warn);border:1px solid rgba(var(--warn-rgb),.5);border-radius:5px;padding:3px 6px;white-space:nowrap}
+.grp{position:absolute;left:8px;width:3px;border-radius:2px}
+#scan{position:absolute;left:12px;right:12px;height:30px;border-radius:9px;background:linear-gradient(90deg,rgba(var(--accent-rgb),.30),rgba(var(--accent-rgb),.06));border:1px solid rgba(var(--accent-2-rgb),.55)}
+#rule{position:absolute;left:22px;right:22px;bottom:18px;font:600 16.5px var(--font-body);color:var(--ink-2);white-space:nowrap}
+#rule b{color:var(--warn)}
+/* yield */
+.ylbl{position:absolute;left:22px;font:700 14px var(--font-mono);letter-spacing:.08em;color:var(--ink-2)}
+.bar{position:absolute;left:96px;height:16px;border-radius:5px;transform-origin:0 50%}
+.bar.h{background:rgba(var(--info-rgb),.85)}
+.bar.a{background:var(--accent)}
+.bv{position:absolute;font:700 14px var(--font-mono);white-space:nowrap}
+.gap{position:absolute;font:700 14px var(--font-mono);color:var(--warn);white-space:nowrap;opacity:.0}
+.hl{position:absolute;left:12px;right:12px;height:52px;border-radius:10px;border:1px solid rgba(var(--warn-rgb),.55);background:rgba(var(--warn-rgb),.06)}
+/* share */
+#waffle{position:absolute;right:24px;top:56px;display:grid;grid-template-columns:repeat(10,9px);gap:3px}
+#waffle i{width:9px;height:9px;border-radius:2px;background:rgba(var(--info-rgb),.28)}
+#waffle i.ag{background:var(--accent-3);box-shadow:0 0 8px rgba(var(--accent-rgb),.9)}
+#big{position:absolute;left:22px;top:66px}
+#big b{display:block;font:700 54px/1 var(--font-display);letter-spacing:-.04em;color:var(--accent-2)}
+#big small{font:700 12px var(--font-mono);letter-spacing:.08em;color:var(--muted)}
+#sharefoot{position:absolute;left:22px;right:22px;bottom:16px;font:500 16.5px var(--font-body);color:var(--muted);white-space:nowrap}
+#sharefoot b{color:#fff}
+/* CTA band */
+#cta{position:absolute;left:0;right:0;bottom:0;height:124px;background:var(--cta);display:flex;align-items:center;justify-content:center}
+#cta .k{font:700 56px var(--font-display);letter-spacing:-.03em;color:var(--cta-ink);white-space:nowrap}
+#cta .k span{color:rgba(var(--cta-ink-rgb),.45);margin:0 6px}
+#cta .k em{font-style:normal;color:var(--ink)}
+</style></head><body>
+<div id="root" data-gif-profile="ambient" data-composition-id="main" data-start="0" data-duration="10" data-width="1080" data-height="1350">
+<div id="scene-clip" class="clip" data-start="0" data-duration="10" style="position:absolute;inset:0">
+<div class="wash"></div><div class="grid"></div>
+
+<div id="logo">acme<span id="cur"></span></div>
+<div id="eyebrow">RESEARCH<i>/</i>ACCEPTANCE TEST</div>
+<h1><b>14 checks</b> before you trust<br>a software factory.</h1>
+<div id="claim">Generating code got cheap. <span>Verifying it did not.</span></div>
+<div id="inside">INSIDE<i>:</i> 14-CHECK SCORECARD <i>+</i> SCORING RULE <i>+</i> LINEARB DATA</div>
+
+<!-- FACTORY LINE -->
+<div class="card" id="line" style="left:60px;top:404px;width:960px;height:262px">
+  <div class="hd"><div class="dot" style="background:var(--accent-2);box-shadow:0 0 10px var(--accent)"></div><b>Run one real spec through the line</b><div class="pill">SCORE YES / NO</div></div>
+  <svg class="abs" width="960" height="262"><line x1="80" y1="118" x2="880" y2="118" stroke="rgba(var(--accent-2-rgb),.35)" stroke-width="2" stroke-dasharray="4 7"/></svg>
+  <div class="st" style="left:96px"><small>IN</small><b>Spec</b><div class="cks"><i></i><i></i><i></i></div><div class="glow"></div></div>
+  <div class="st" style="left:248px"><small>OUT</small><b>Code</b><div class="cks"><i></i><i></i><i></i><i></i><i></i></div><div class="glow"></div></div>
+  <div class="st" style="left:400px"><small>CONTROLS</small><b>Verifier</b><div class="cks"><i></i><i></i><i></i></div><div class="glow"></div></div>
+  <div class="st" style="left:552px"><small>CONTROLS</small><b>Human</b><div class="cks"><i></i></div><div class="glow"></div></div>
+  <div class="st" style="left:704px"><small>MEASURES</small><b>Yield</b><div class="cks"><i></i><i></i></div><div class="glow"></div></div>
+  <div class="st end" style="left:856px"><small>RESULT</small><b>Ships</b><div class="cks"><i></i></div><div class="glow"></div></div>
+  <div id="weak">WEAKENED TEST · BLOCKED</div>
+  <div id="tok">SPEC</div>
+  <div id="linefoot">Score it against <b>your team's own baseline</b>, not the vendor's demo.</div>
+</div>
+
+<!-- SCORECARD -->
+<div class="card" id="score" style="left:60px;top:682px;width:520px;height:528px">
+  <div class="hd"><b>The 14 checks</b><div class="pill" style="color:var(--ok);border-color:rgba(var(--ok-rgb),.4)">1 SPEC · 1 RUN</div></div>
+  <div id="scan"></div>
+  <div id="rows"></div>
+  <div id="rule">Fewer than <b>11 yes</b>: it generates more than it verifies.</div>
+</div>
+
+<!-- YIELD -->
+<div class="card" id="yield" style="left:596px;top:682px;width:424px;height:300px">
+  <div class="hd"><b>Merged within 30 days</b></div>
+  <div class="mono" style="position:absolute;left:22px;top:56px"><span style="color:var(--info)">■</span> HUMAN PRs &nbsp;<span style="color:var(--accent)">■</span> AGENT PRs</div>
+  <div class="hl" id="hl"></div>
+  <div id="bars"></div>
+  <div class="mono" style="position:absolute;left:22px;bottom:16px;color:var(--muted)">LINEARB · AUG 2026 · 2.7M PRs</div>
+</div>
+
+<!-- SHARE -->
+<div class="card" id="share" style="left:596px;top:998px;width:424px;height:212px">
+  <div class="hd"><b>Agent-authored PRs</b></div>
+  <div id="waffle"></div>
+  <div id="big"><b>4.7%</b><small>MAX, ELITE TEAMS</small></div>
+  <div id="sharefoot">And they wait <b>4.6x longer</b> for review.</div>
+</div>
+
+<div id="cta"><div class="k">FULL DOCUMENT <span>·</span> <em>LINK IN THE POST</em></div></div>
+</div>
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const END = 10;
+const TOK = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const OK = TOK('--ok-rgb');
+const tl = gsap.timeline({ paused: true });
+
+// logo cursor blinks (1 s period, 10 cycles per loop)
+for (let k = 0; k < 10; k++) tl.set("#cur", {opacity:0}, k + .5).set("#cur", {opacity:1}, k + 1);
+
+// FACTORY LINE: two trips per loop; each station flares as the spec passes
+const ST = gsap.utils.toArray("#line .st"), XS = [96, 248, 400, 552, 704, 856];
+gsap.set("#tok", {x:30, opacity:0});
+[0.2, 5.2].forEach((t0, trip) => {
+  tl.set("#tok", {x:30, opacity:0}, t0).to("#tok", {opacity:1, duration:.2}, t0);
+  XS.forEach((x, i) => {
+    const s = t0 + .25 + i * .62;
+    tl.to("#tok", {x, duration:.5, ease:"power2.inOut"}, s - .5 < t0 ? t0 : s - .5);
+    tl.to(ST[i].querySelector(".glow"), {opacity:1, duration:.15}, s).to(ST[i].querySelectorAll(".cks i"), {opacity:1, scale:1.25, duration:.15, stagger:.03}, s)
+      .to(ST[i].querySelector(".glow"), {opacity:0, duration:.45}, s + .5).to(ST[i].querySelectorAll(".cks i"), {opacity:.55, scale:1, duration:.4}, s + .55);
+  });
+  // controls: a weakened test tries to pass and is blocked
+  const sb = t0 + .25 + 2 * .62;
+  tl.fromTo("#weak", {opacity:0, y:8}, {opacity:1, y:0, duration:.2, immediateRender:false}, sb - .1)
+    .to("#weak", {opacity:0, duration:.35}, sb + 1.4);
+  tl.to("#tok", {opacity:0, duration:.3}, t0 + .25 + 5 * .62 + .6);
+});
+
+// SCORECARD: 14 rows in four groups; a scan bar walks them
+const ROWS = [
+  ["Spec has criteria and scenarios", 0], ["Its owner can review it in one sitting", 0], ["Ambiguity produces a question", 0],
+  ["Code lands in the right layer", 1], ["Tests come from the criteria", 1], ["Visual evidence for UI changes", 1], ["A traceability record exists", 1], ["A run log exists", 1],
+  ["Verifier did not write the tests", 2], ["A human approves every merge", 2], ["Every PR has a named owner", 2],
+  ["Merge yield vs your baseline", 3], ["Rework rate on merged changes", 3], ["Cost per effective PR", 3],
+];
+const GC = ["var(--accent-2)", "var(--info)", "var(--warn)", "var(--ok)"], RW = document.getElementById("rows"), Y0 = 56, RH = 29.2;
+const CK = '<svg viewBox="0 0 24 24" width="15" height="15"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="var(--ok)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ckEls = [];
+ROWS.forEach(([t, g], i) => {
+  const r = document.createElement("div"); r.className = "row" + (i === 8 ? " hot" : ""); r.style.top = (Y0 + i * RH) + "px";
+  r.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${t}</span>` + (i === 8 ? '<span class="tag">MOST MISSED</span>' : "") + `<span class="ck" style="${i === 8 ? "margin-left:10px" : ""}">${CK}</span>`;
+  RW.appendChild(r); ckEls.push(r.querySelector(".ck"));
+});
+// group bars on the left edge
+[[0,3],[3,8],[8,11],[11,14]].forEach(([a, b], g) => { const d = document.createElement("div"); d.className = "grp"; d.style.top = (Y0 + a * RH + 4) + "px"; d.style.height = ((b - a) * RH - 8) + "px"; d.style.background = GC[g]; RW.appendChild(d); });
+gsap.set("#scan", {y:Y0 - 1, opacity:0});
+tl.to("#scan", {opacity:1, duration:.3}, .2);
+ROWS.forEach((_, i) => {
+  const s = .35 + i * .6;
+  if (i) tl.to("#scan", {y:Y0 - 1 + i * RH, duration:.3, ease:"power2.inOut"}, s - .3);
+  tl.to(ckEls[i], {scale:1.3, backgroundColor:`rgba(${OK},.45)`, duration:.15}, s).to(ckEls[i], {scale:1, backgroundColor:`rgba(${OK},.14)`, duration:.35}, s + .2);
+});
+tl.to("#scan", {opacity:0, duration:.4}, 9.0).set("#scan", {y:Y0 - 1}, 9.45);
+[5.2, 5.8].forEach(s => tl.to("#score .row.hot .tag", {scale:1.15, duration:.15}, s).to("#score .row.hot .tag", {scale:1, duration:.25}, s + .17));
+
+// YIELD: LinearB merge within 30 days, human vs agent by tier
+const TIERS = [["ELITE", 90, 79], ["GOOD", 86, 58], ["FAIR", 81, 37]], BW = 220, BY = 92, BH = 58;
+const BARS = document.getElementById("bars"), GAPS = [];
+TIERS.forEach(([n, h, a], i) => {
+  const y = BY + i * BH;
+  BARS.insertAdjacentHTML("beforeend",
+    `<div class="ylbl" style="top:${y + 9}px">${n}</div>` +
+    `<div class="bar h" style="top:${y}px;width:${BW * h / 100}px"></div><div class="bv" style="top:${y - 1}px;left:${104 + BW * h / 100}px;color:var(--info)">${h}%</div>` +
+    `<div class="bar a" style="top:${y + 21}px;width:${BW * a / 100}px"></div><div class="bv" style="top:${y + 20}px;left:${104 + BW * a / 100}px;color:var(--accent-3)">${a}%</div>` +
+    `<div class="gap" id="gap${i}" style="top:${y + 20}px;left:${152 + BW * a / 100}px">−${h - a} PTS</div>`);
+});
+gsap.set("#hl", {y:BY - 9, opacity:0});
+[0.4, 3.6, 6.8].forEach((s, i) => {
+  tl.to("#hl", {opacity:1, y:BY - 9 + i * BH, duration:.4, ease:"power2.inOut"}, s)
+    .to(`#gap${i}`, {opacity:1, duration:.25}, s + .3).to(`#gap${i}`, {opacity:0, duration:.3}, s + 2.9);
+});
+tl.to("#hl", {opacity:0, duration:.4}, 9.5);
+
+// SHARE: 100 PRs, about 5 by agents (4.7% max); the agent cells pulse in sequence
+const WF = document.getElementById("waffle"), AG = [13, 37, 58, 76, 94], AGE = [];
+for (let i = 0; i < 100; i++) { const c = document.createElement("i"); if (AG.includes(i)) { c.className = "ag"; AGE.push(c); } WF.appendChild(c); }
+AGE.forEach((c, k) => { const s = .8 + k * 1.8; tl.to(c, {scale:1.6, duration:.2, ease:"back.out(3)"}, s).to(c, {scale:1, duration:.4}, s + .3); });
+
+tl.set({}, {}, END);
+window.__timelines["main"] = tl; tl.seek(0);
+</script>
+</body></html>

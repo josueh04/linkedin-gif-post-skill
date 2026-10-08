@@ -1,0 +1,16 @@
+{
+  "canvas": [1080, 1350],
+  "cta_band_px": 124,
+  "max_frames": 250,
+  "max_bytes": 4194304,
+  "max_seam_diff": 1.0,
+  "min_motion": 2.0,
+  "min_live_cells": null,
+  "gif_size": [720, 900],
+  "fps": 30,
+  "loop_seconds": 8,
+  "colors": 192,
+  "profiles": {
+    "ambient": {"gif_size": [1080, 1350], "fps": 15, "loop_seconds": 10, "colors": 128, "min_live_cells": 0.40}
+  }
+}
