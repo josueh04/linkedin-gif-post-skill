@@ -19,10 +19,12 @@ The graphic stops the scroll. The caption decides whether the reader wants the r
 
 | | Link in the post | Comment to get it |
 |---|---|---|
-| Caption ends with | "All 14 checks, with how to score each one:" plus the link on its own line | "Comment the word in the image and I'll send it to you." Never write the keyword in the caption |
+| Caption ends with | "All 14 checks, with how to score each one:" plus the link on its own line | A short access line pointing at the image: "Free Access 👇", "Get free access 👇", "PRIORITY ACCESS 👇". Never ask for a comment in the caption and never write the keyword there; the image's band does that job |
 | CTA band | `FULL DOCUMENT · LINK IN THE POST` | `COMMENT "KEYWORD"` |
 | Work after posting | None | Someone has to DM every commenter, by hand or with an automation tool |
 | What it buys | Readers get the resource with one click. The tradeoff is that they leave LinkedIn and few comment | Comments signal the algorithm and start a conversation. In the study, comment-gated posts drew 1.5 to 4.8x more comments than reactions |
+
+Why the caption never says "comment": a caption that asks for comments outright ("Comment X and I'll send it") reads as engagement bait to readers and to LinkedIn, and it sounds like a funnel. The access line keeps the caption about the resource and lets the image carry the mechanic.
 
 Start with the link mode if nobody can answer DMs. Move to the comment mode once the content proves itself and someone can handle the replies. Put the keyword only in the image: posts that also put it in the caption drew 0.86x their author's usual comments, against 1.23x when it lived only in the media.
 
