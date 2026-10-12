@@ -2,6 +2,26 @@
 
 The graphic stops the scroll. The caption decides whether the reader wants the resource. LinkedIn shows about the first 210 characters before "...see more", and that preview has to sell the click.
 
+## Before writing: is the topic worth a post?
+
+A resource post needs two things at once:
+- **Hype:** a reason to read it this week. A model, agent or feature that just shipped; a change people are talking about.
+- **An outcome the reader wants:** a client, a booked call, a lead list, a proposal they can send today.
+
+A topic with only one of the two underperforms. "How to make GIFs for your posts" is craft without a reader outcome, and nobody comments for it. "Claude Haiku 5.5 tells you which commenters can become clients" has both. If the resource lacks one of them, reframe it before writing (name the new tool it uses, or the client outcome it serves), or tell the user.
+
+## Three variations, three hook shapes
+
+Write three captions and recommend one. Use different hook shapes so the user is choosing between ideas, not wordings:
+
+| Shape | Line 1 pattern | Example |
+|---|---|---|
+| Quantity build | Tool + time + counted outcome, then an arrow list of the outputs | "One hour a week with Opus 5.5 gets you 6 pieces of client content." |
+| Problem | The reader's specific pain, in their words | "Most people who comment on your post will never buy. You DM them all anyway." |
+| Contrarian | A belief the reader holds, turned | "Your best LinkedIn content is already written. It's in your sales calls." |
+
+The quantity build was the strongest in the first weeks of this method. Do not borrow another creator's signature hook ("BYE BYE ...") or closer; readers recognize it and it reads as a copy.
+
 ## Structure
 
 1. **Line 1: the reader's problem or stake, in plain words.** Name the tool or topic, and make a claim about the reader's world. "Your AI coding pipeline can pass its own tests and still rot your codebase." beats "The cost of generating code collapsed.", which is true but abstract. Never spend the preview on who quoted whom.
@@ -11,7 +31,9 @@ The graphic stops the scroll. The caption decides whether the reader wants the r
 5. **The scoring rule or the one insight,** in one line ("Fewer than 11 yes means...").
 6. **What the resource contains, then the call to action** (see the two modes below).
 
-**Length:** a research post can run 200 to 260 words. That is longer than a typical lead-magnet post, because the reader needs the method to trust the document. Cut anything that does not serve steps 1 to 6.
+**Length:** a lead-magnet post runs about 150 to 200 words; the study's shortest captions (under 170 words) did best, on a small sample. A research post that must show its method to earn trust can run to 260. Cut anything that does not serve steps 1 to 6.
+
+**When the keyword is the tool's name** (HAIKU for a post about Claude Haiku 5.5), naming the tool in the caption is fine: write it as the product name ("Claude Haiku 5.5"), never as the keyword in caps and never next to a request to type it.
 
 **Voice:** first person is fine ("before I let a pipeline near a backlog, I..."). Make no claims about results the author did not get, and use no invented numbers.
 
@@ -23,6 +45,8 @@ The graphic stops the scroll. The caption decides whether the reader wants the r
 | CTA band | `FULL DOCUMENT · LINK IN THE POST` | `COMMENT "KEYWORD"` |
 | Work after posting | None | Someone has to DM every commenter, by hand or with an automation tool |
 | What it buys | Readers get the resource with one click. The tradeoff is that they leave LinkedIn and few comment | Comments signal the algorithm and start a conversation. In the study, comment-gated posts drew 1.5 to 4.8x more comments than reactions |
+
+**Avoid the word "comment" in any form,** even when it only describes people ("most people who comment on your post"). Say "the people under your post", "replies" or "everyone who raised a hand" instead. A reader skimming for the mechanic sees the word and reads the whole caption as a funnel, and a single descriptive use was enough to make the first test captions read that way.
 
 Why the caption never says "comment": a caption that asks for comments outright ("Comment X and I'll send it") reads as engagement bait to readers and to LinkedIn, and it sounds like a funnel. The access line keeps the caption about the resource and lets the image carry the mechanic.
 

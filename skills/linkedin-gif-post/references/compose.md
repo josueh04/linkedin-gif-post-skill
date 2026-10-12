@@ -2,9 +2,20 @@
 
 The default path is an original composition built for this resource, not a template with the words swapped. A template fits only when the resource has the same shape it was made for. This file is the method: from the resource to a concept, a layout, a motion plan and working code. Templates in `assets/templates/` are worked examples of that method, worth reading for technique, not for copying.
 
-## 1. Find the resource's shape
+## 1. Start from the reader's outcome, then the resource's shape
 
-Read the resource and decide what kind of thing it is. The shape decides the picture.
+The story comes first: what the reader wants (a client, a booked call, a list of leads) and the path to it in their own world, with the tool doing one job inside that path. Draw that world faithfully: their LinkedIn post and its comments, a DM thread, an inbox, a calendar, a document they send. The resource's internals (its prompts, rubrics, templates) stay in the header's INSIDE line.
+
+One GIF per week of posts made this way, each a different chain:
+
+| Tool's job | The chain on screen |
+|---|---|
+| Qualify commenters | Post collects comments → the tool scores each person → the best fit gets a personal DM → "Discovery call booked" |
+| Write a proposal | DM ends in "Call booked" → call notes go to the tool → a proposal writes itself section by section → the PDF goes back into the DM → "Let's do option B." |
+| Build the free guide | A topic goes in → the tool builds a multi-page guide → the guide sits inside a post → comments arrive → each becomes "New lead" in a list |
+| Follow up every lead | A lead arrives from the guide → an agent drafts a follow-up → you tap Approve → a reply comes in → "Call booked" with a brief ready |
+
+Then read the resource's shape. The shape decides the motion and the metaphor inside the story.
 
 | Shape | The resource... | Visual metaphors that fit |
 |---|---|---|
@@ -18,7 +29,7 @@ Read the resource and decide what kind of thing it is. The shape decides the pic
 | Cycle | ...repeats every week or month | An orbit; a clock face; a loop track. Cycles make natural seamless loops |
 | Ladder or catalog | ...is a set of patterns or levels, ordered by complexity, maturity or cost | A ladder a token climbs; a staircase; a stack of tiers; a periodic table with one cell lit at a time |
 
-Write one sentence before any code: "**[Something concrete]** travels or transforms **[through what]** and becomes **[the outcome the reader wants]**." Example: "One real ticket travels the factory line, gets checked at 14 gates, and ships, or gets blocked at check 9." If you cannot write the sentence, you do not have a concept yet.
+Write one sentence before any code: "**[Something concrete from the reader's world]** travels or transforms **[through the tool]** and becomes **[the outcome the reader wants]**." Example: "One real ticket travels the factory line, gets checked at 14 gates, and ships, or gets blocked at check 9." If you cannot write the sentence, you do not have a concept yet.
 
 ## 2. Choose the loop family
 
@@ -27,16 +38,16 @@ Write one sentence before any code: "**[Something concrete]** travels or transfo
 | What happens | Everything is on screen in every frame; motion highlights, travels and breathes inside the cards | The body clears, rebuilds with one big move (a sweep, a camera push, an explosion), then holds the finished frame |
 | Fits | Dense resources with several parts (a checklist plus data plus method); research | One strong transformation or discovery; a launch; a single system |
 | Spec | 10 s, 15 fps, 1080x1350 | 8 s, 30 fps, 720x900 |
-| Risk | Reads as static if few parts move (the gate needs 40% of the body alive) | Heavy if large areas move long; a half-built frame if the clear runs late |
+| Risk | Reads as static if few parts move (the gate needs 40% of the canvas above the CTA band alive; the still header counts, so plan for about 55% of the body) | Heavy if large areas move long; a half-built frame if the clear runs late |
 
 Set it with `new_animation.py --profile ambient|build`.
 
 ## 3. Lay out the canvas
 
-- **Fixed:** the CTA band, 124 px at the bottom. Nothing else is fixed.
+- **Fixed:** the CTA band, 104 px at the bottom. Nothing else is fixed.
 - **The header can move.** Top-left with logo top-right, logo and title on the left with the eyebrow on the right, or the title at the bottom above the CTA with the scene on top. Change it between a brand's posts so they don't look alike.
 - **The body gets 60% or more of the canvas.** Pick one hero zone (about half the body) for the concept sentence, and 2 to 4 supporting zones for the list, the data and the proof. A layout with no hero reads as a dashboard.
-- **Sketch zones as rectangles with coordinates** before writing HTML. For example: header 0 to 390; hero 404 to 666 full width; left column 60 to 580 from 682 to 1210; right column 596 to 1020, split at 982. Margins are 60 px, and gutters 16 px.
+- **Sketch zones as rectangles with coordinates** before writing HTML. For example: header 0 to 390; hero 404 to 666 full width; left column 60 to 580 from 682 to 1210; right column 596 to 1020, split at 982. Margins are 64 px, and gutters 24 to 40 px.
 - **Every zone holds real content** from the resource: its step names, its counts, its numbers with their source. Write the words first, then size the zones to fit them at legible sizes (`design.md`, Cards).
 
 ## 4. Plan the motion

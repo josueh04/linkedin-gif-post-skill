@@ -6,9 +6,9 @@
 <!--
   blank: the frame only, for an original composition (references/compose.md).
   What is fixed: the canvas, the brand tokens, the background, the header slots and the CTA band.
-  What is yours: everything inside #body (1080 wide, from y=400 to y=1210 by default) and the timeline.
+  What is yours: everything inside #body (1080 wide, from y=400 to y=1230 by default; the CTA band starts at y=1246) and the timeline.
   The header never animates, but you may place it anywhere (compose.md, Layout). The CTA band stays at the bottom.
-  Elements with class "fit" shrink at load until they fit their max-width (the CTA, the INSIDE line, long titles).
+  Elements with class "autofit" shrink at load until they fit their max-width (the CTA, the INSIDE line, long titles).
   If any tween runs past END, a red banner appears on the canvas: the sheet and the gates then show the mistake.
   GIF profile: data-gif-profile="ambient" (10 s, 15 fps, 1080x1350, never clears) or "build"
   (8 s, 30 fps, 720x900, clears and rebuilds). new_animation.py --profile sets both attributes.
@@ -56,8 +56,8 @@ h1 b{font-weight:700;color:var(--accent-2)}
 .mono{font:700 13px var(--font-mono);letter-spacing:.08em;color:var(--muted);white-space:nowrap}
 svg.abs{position:absolute;left:0;top:0;overflow:visible}
 /* CTA band (never animates) */
-#cta{position:absolute;left:0;right:0;bottom:0;height:124px;background:var(--cta);display:flex;align-items:center;justify-content:center}
-#cta .k{font:700 72px var(--font-display);letter-spacing:-.03em;color:var(--cta-ink);white-space:nowrap}
+#cta{position:absolute;left:0;right:0;bottom:0;height:104px;background:var(--cta);display:flex;align-items:center;justify-content:center}
+#cta .k{font:700 60px var(--font-display);letter-spacing:-.03em;color:var(--cta-ink);white-space:nowrap}
 #cta .k em{font-style:normal;color:var(--ink)}
 </style></head><body>
 <div id="root" data-gif-profile="ambient" data-composition-id="main" data-start="0" data-duration="10" data-width="1080" data-height="1350">
@@ -67,14 +67,14 @@ svg.abs{position:absolute;left:0;top:0;overflow:visible}
 <div id="logo">acme</div>
 <div id="eyebrow">CONTENT TYPE / RESOURCE NAME</div>
 <h1><b>N things</b> the title promises<br>on two lines.</h1>
-<div id="claim" class="fit" style="max-width:960px">The thesis in one line. <span>The outcome, emphasized.</span></div>
-<div id="inside" class="fit" style="max-width:960px"><b>INSIDE:</b> WHAT <i>+</i> THE RESOURCE <i>+</i> CONTAINS</div>
+<div id="claim" class="autofit" style="max-width:960px">The thesis in one line. <span>The outcome, emphasized.</span></div>
+<div id="inside" class="autofit" style="max-width:960px"><b>INSIDE:</b> WHAT <i>+</i> THE RESOURCE <i>+</i> CONTAINS</div>
 
 <div id="body">
   <!-- Your composition goes here. Read references/compose.md first. -->
 </div>
 
-<div id="cta"><div class="k fit" style="max-width:1000px">FULL DOCUMENT · <em>LINK IN THE POST</em></div></div>
+<div id="cta"><div class="k autofit" style="max-width:1000px">FULL DOCUMENT · <em>LINK IN THE POST</em></div></div>
 </div>
 </div>
 
@@ -89,7 +89,7 @@ let seed = 7; const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648
 
 // Shrink every .fit element until it fits its max-width (deterministic: runs once, after fonts load).
 function fitAll() {
-  document.querySelectorAll(".fit").forEach(e => {
+  document.querySelectorAll(".autofit").forEach(e => {
     const max = parseFloat(e.style.maxWidth) || e.parentElement.clientWidth;
     let fs = parseFloat(getComputedStyle(e).fontSize);
     e.style.whiteSpace = "nowrap"; e.style.maxWidth = "none";
