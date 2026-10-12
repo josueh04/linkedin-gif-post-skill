@@ -3,6 +3,7 @@
 ## Canvas
 
 - 1080x1350 (4:5), authored at 1x. Ambient loops render and ship at 15 fps. A build loop (one that clears and rebuilds with a big move) ships at 720x900 and 30 fps; set `data-gif-profile="build"` or remove the attribute.
+- **When the subject's product has a light UI or a pastel world** (a chat app, a mascot product), draw its panels light and faithful. Either keep them on a dark canvas as light cards, or make the whole canvas the product's own light world. Pick by what makes the topic recognizable in under a second.
 - **Dark and dense reads as premium in the feed:**
   - **Background:** the brand's darkest color.
   - **Washes:** two or three radial washes of the accents at 7 to 22% opacity.
@@ -69,7 +70,7 @@ The header stays still, but its position is yours: top-left, split left and righ
 
 - Full width, flush to the bottom, 104 px tall (`cta_band_px` in config.json; the gate reads it). It was 124 px; readers found it too loud, and the 20 px go back to the story.
 - **The color:** the brand's main accent as a flat fill, with no gradient, because the gate checks that the band is flat. The text is in `--cta-ink`, with the key phrase in `--ink`.
-- **The text:** one line at 52 to 64 px.
+- **The text:** one line at 52 to 64 px. Check the contrast of the text and the key phrase against the band (4.5:1 or better). A mid-tone accent band usually needs dark ink, not white or cream.
 - It stays at the bottom, right above LinkedIn's action bar.
 
 ## Weight budget (4 MiB)
