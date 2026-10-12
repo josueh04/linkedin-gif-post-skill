@@ -45,7 +45,7 @@ Set it with `new_animation.py --profile ambient|build`.
 ## 3. Lay out the canvas
 
 - **Fixed:** the CTA band, 104 px at the bottom. Nothing else is fixed.
-- **The header can move.** Top-left with logo top-right, logo and title on the left with the eyebrow on the right, or the title at the bottom above the CTA with the scene on top. Change it between a brand's posts so they don't look alike.
+- **The header can be placed anywhere (it never animates).** Top-left with logo top-right, logo and title on the left with the eyebrow on the right, or the title at the bottom above the CTA with the scene on top. Change it between a brand's posts so they don't look alike.
 - **The body gets 60% or more of the canvas.** Pick one hero zone (about half the body) for the concept sentence, and 2 to 4 supporting zones for the list, the data and the proof. A layout with no hero reads as a dashboard.
 - **Sketch zones as rectangles with coordinates** before writing HTML. For example: header 0 to 390; hero 404 to 666 full width; left column 60 to 580 from 682 to 1210; right column 596 to 1020, split at 982. Margins are 64 px, and gutters 24 to 40 px.
 - **Every zone holds real content** from the resource: its step names, its counts, its numbers with their source. Write the words first, then size the zones to fit them at legible sizes (`design.md`, Cards).

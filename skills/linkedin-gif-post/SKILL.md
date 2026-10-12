@@ -64,7 +64,7 @@ Node 22+ (for `npx hyperframes@latest`), ffmpeg, Google Chrome, Python 3.9+ with
    ```bash
    python3 scripts/new_animation.py --out posts/<slug> --template blank --profile ambient --brand posts/<slug>/brand.json
    ```
-   `blank` gives the frame only: the brand tokens, the header slots, the CTA band and an empty `#body`. Add `--logo path/to/logo.svg` to use the brand's logo file in place of the text wordmark. Write the zones and the timeline from your beat sheet, using the motion library in `compose.md`. The header can move; the CTA band stays at the bottom. Pick the CTA mode in `references/copy.md`. Run `npx hyperframes lint posts/<slug>/animation` until it shows 0 errors. `references/hyperframes.md` lists the gotchas.
+   `blank` gives the frame only: the brand tokens, the header slots, the CTA band and an empty `#body`. Add `--logo path/to/logo.svg` to use the brand's logo file in place of the text wordmark. Write the zones and the timeline from your beat sheet, using the motion library in `compose.md`. The header never animates, but you choose where it sits; the CTA band stays at the bottom. Pick the CTA mode in `references/copy.md`. Run `npx hyperframes lint posts/<slug>/animation` until it shows 0 errors. `references/hyperframes.md` lists the gotchas.
 
 6. **Review the motion before rendering.**
    ```bash
@@ -78,7 +78,7 @@ Node 22+ (for `npx hyperframes@latest`), ffmpeg, Google Chrome, Python 3.9+ with
    - the first and last tiles match;
    - the finish holds at full size: aligned edges on a 64 px margin, no label touching another, real words where a reader would expect words (not grey placeholder bars), official marks standing alone (never a logo tile inside another tile).
 
-   Fix and repeat until all five hold. A composition rarely works on the first pass. Plan two or three rounds.
+   Fix and repeat until all of these hold. After any fix made after rendering, run `snapshot_sheet.py` again so the sheet matches the GIF. A composition rarely works on the first pass. Plan two or three rounds.
 
 7. **Render, then gate.**
    ```bash

@@ -88,7 +88,7 @@ def main():
         ("SEAM", seam <= float(cfg["max_seam_diff"]), f"first vs last frame diff {seam:.2f} (max {cfg['max_seam_diff']})"),
         ("MOTION", motion >= float(cfg["min_motion"]), f"largest change from frame 1 is {motion:.1f}, min {cfg['min_motion']} (a GIF that barely moves is a static post)")
         if not cfg.get("min_live_cells") else
-        ("MOTION", live >= float(cfg["min_live_cells"]), f"{live:.0%} of the canvas above the CTA band (header included) moves at some point, min {float(cfg['min_live_cells']):.0%} (an ambient loop with few live parts reads as static)"),
+        ("MOTION", live >= float(cfg["min_live_cells"]), f"{live:.1%} of the canvas above the CTA band (header included) moves at some point, min {float(cfg['min_live_cells']):.0%} (an ambient loop with few live parts reads as static)"),
         ("BAND", band_ok, f"CTA band flat (std {flat:.1f}, max 6), even (top vs bottom {same:.1f}, max 8), stands out (vs body {contrast:.0f}, min 30)"),
     ]
     failed = False
