@@ -75,7 +75,12 @@ def main():
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    html = get(a.url)
+    try:
+        html = get(a.url)
+    except Exception as e:  # many brand sites (openai.com, for one) block scripted fetches with 403
+        sys.exit(f"Could not read {a.url} ({e}). Read the site in a browser instead, or the product's launch page "
+                 "and press kit, and write brand.json by hand from the blank template's tokens "
+                 "(bg, ink, accent, fonts, logo). Do not guess colors from memory.")
     css = "\n".join(re.findall(r"<style[^>]*>(.*?)</style>", html, re.S))
     links = [t for t in re.findall(r"<link[^>]+>", html, re.I) if re.search(r'rel="stylesheet"', t, re.I)]
     hrefs = [m.group(1) for t in links for m in [re.search(r'href="([^"]+)"', t)] if m]

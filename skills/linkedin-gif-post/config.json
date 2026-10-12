@@ -1,6 +1,6 @@
 {
   "canvas": [1080, 1350],
-  "cta_band_px": 124,
+  "cta_band_px": 104,
   "max_frames": 250,
   "max_bytes": 4194304,
   "max_seam_diff": 1.0,

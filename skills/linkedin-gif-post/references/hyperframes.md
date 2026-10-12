@@ -42,5 +42,7 @@ HyperFrames is HeyGen's open-source (Apache-2.0) HTML-to-video renderer, tested 
 | A dot must follow a curve | Hand-computing points needs `onUpdate`, which seeking can skip | Load `MotionPathPlugin` from the same GSAP version (`gsap@3.14.2/dist/MotionPathPlugin.min.js`), register it, and tween `motionPath: {path, align, alignOrigin: [.5, .5], start, end}`; ride out and back so the loop closes |
 | A starfield or particle field must look random but render the same every time | `Math.random()` breaks determinism | Use a seeded LCG at load: `seed = (seed * 1103515245 + 12345) % 2147483648` |
 
+| `lint` warns `duplicate_media_discovery_risk` | The same `<img src>` is used twice (a mark in the header and again in the body) | Copy the file under a second name for the second use |
+| A gradient text line turns into a solid bar | Replacing the template's `background` on a `background-clip:text` element drops the clip | Change only the gradient's colors, or re-add `-webkit-background-clip:text; color:transparent` |
 | A GSAP tween on a color token does nothing | GSAP cannot interpolate `var(--x)` | Read the token once with `getComputedStyle(document.documentElement).getPropertyValue('--x-rgb')` and tween `rgba(${v},a)` |
 | An arrow or symbol renders in a fallback font | Latin font subsets often lack `→` and other symbols | Check the glyph exists, or set it in the mono, or write the word |

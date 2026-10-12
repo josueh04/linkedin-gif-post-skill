@@ -30,9 +30,10 @@ The header stays still, but its position is yours: top-left, split left and righ
   - a mono: JetBrains Mono or Geist Mono.
 
   Say which substitution you made.
+- **Substitutes are not bundled.** If you pick an open substitute the template does not carry, download it from Google Fonts (all OFL) into `animation/fonts/` and add its license.
 - **Without a brand typeface,** prefer a sans for display. Editorial italic serifs on a tech topic read as generic AI output.
 - **Bundle every font locally,** in `animation/fonts/`. A missing font falls back to a system face in the render.
-- `.fit` elements in the templates shrink at load until they fit their max-width. Use it on any one-line text that varies in length.
+- `.autofit` elements in the templates shrink at load until they fit their max-width. Use it on any one-line text that varies in length. (It was `.fit` before; that name collided with "Fit" columns in trackers.)
 
 ## Cards
 
@@ -66,9 +67,9 @@ The header stays still, but its position is yours: top-left, split left and righ
 
 ## CTA band (never animates)
 
-- Full width, flush to the bottom, 124 px tall (`cta_band_px` in config.json; the gate reads it).
+- Full width, flush to the bottom, 104 px tall (`cta_band_px` in config.json; the gate reads it). It was 124 px; readers found it too loud, and the 20 px go back to the story.
 - **The color:** the brand's main accent as a flat fill, with no gradient, because the gate checks that the band is flat. The text is in `--cta-ink`, with the key phrase in `--ink`.
-- **The text:** one line at 56 to 76 px. Shorter text can go larger.
+- **The text:** one line at 52 to 64 px.
 - It stays at the bottom, right above LinkedIn's action bar.
 
 ## Weight budget (4 MiB)
@@ -86,6 +87,15 @@ GIF frames store only the pixels that change, so file size follows how many pixe
 - **Use bursts (move, then rest)** rather than continuous motion; a burst roughly halves a region's cost.
 - `render_gif.py` steps the palette down (128 to 96 colors), then drops dithering, then fps, then width. Check one decoded frame for banding.
 
+## Finish (what separates premium from almost)
+
+- **A grid.** 64 px outer margins, one gutter size (24 to 40 px), aligned left edges and baselines across zones, one radius family.
+- **No collisions.** Labels never touch other labels, lines never run through text, nothing clips at a card edge. Check the contact sheet at full size, not the thumbnail.
+- **Real copy.** Where a reader expects words (a comment, a DM, an email subject, a calendar event), write believable words. Grey placeholder bars are fine only for dense secondary texture.
+- **Type discipline.** One display family, one text family, one mono. Sentence case for UI copy; letter-spaced caps only for small labels.
+- **Marks.** Official vectors, at 112 to 132 px in the header, standing alone with a glow or a halo. Never place a logo that is already a tile (like LinkedIn's square "in") inside another tile. The bundled `assets/marks/linkedin-in.svg` is the LinkedIn mark.
+- **Platform surfaces drawn faithfully.** A LinkedIn post, comment, DM or notification should read as LinkedIn at a glance: avatar, name with a role, timestamp, the action row. Draw them yourself; do not screenshot.
+
 ## Never
 
 - Invented clients, revenue, bookings or results.
@@ -93,5 +103,7 @@ GIF frames store only the pixels that change, so file size follows how many pixe
 - A near-copy of someone else's post: their layout, palette or CTA shape. Borrow the principle; keep the brand.
 - A header that names the topic but not what the reader gets.
 - System fonts; the render falls back to something cheap. Bundle the brand's fonts locally.
-- Text that runs off the canvas or out of its card. No gate catches it: check the sheet, or mark the element `.fit`.
+- Text that runs off the canvas or out of its card. No gate catches it: check the sheet, or mark the element `.autofit`.
 - A square text card that repeats the caption.
+- A logo typed in a font, traced from a screenshot, or recolored.
+- A product drawn in a look its makers never used.

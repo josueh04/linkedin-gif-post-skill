@@ -52,6 +52,20 @@ One post was republished with an animated GIF in place of a static photo, with a
 
 LinkedIn kept all 240 frames of that GIF and re-encoded it only slightly (4.15 MB to 4.08 MB).
 
+The first full week (five posts, one account of about 8k followers, October 2026):
+
+| Graphic | Comments |
+|---|---|
+| Static photo | 22, 13 |
+| Animated GIF | 70, 38, 18 |
+
+About half of every count is the account's own automated replies, on both sides. Topics and hooks differed between posts, so this is a direction, not proof. The weakest GIF post had the weakest topic, which is why `copy.md` asks for hype and a reader outcome before anything else.
+
+What the author rejected on review, and the skill now prevents:
+- GIFs that diagrammed the resource's internals instead of the reader's path to a client.
+- A LinkedIn logo typed in a font, and a product drawn in a look its makers never used.
+- A CTA band large enough to compete with the story (124 px, now 104 px).
+
 ## Sources
 
 - LinkedIn Images API: GIFs up to 250 frames, and images under 36,152,320 pixels. https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/images-api

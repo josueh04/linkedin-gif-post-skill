@@ -21,7 +21,7 @@ DEFAULTS = {
     "max_bytes": 4194304,    # 4 MiB: stays under the 5 MB image limit most schedulers enforce
     "max_seam_diff": 1.0,
     "colors": 192,
-    "cta_band_px": 124,
+    "cta_band_px": 104,
     "min_motion": 2.0,
     "min_live_cells": None,
     "profiles": {
